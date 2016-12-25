@@ -1,5 +1,11 @@
 {
-  "manifest_version": 1,
+  "manifest_version": 2,
   "name": "Peeper",
   "version": "0.1",
+  "description": "Attributes names recognized by the Alchemy API with photos from Google's search API.",
+
+  "browser_action" : {
+    "default_icon" : "icon.png",
+    "default_popup" : "popup.html" 
+  }
 }
