@@ -1,27 +1,24 @@
 window.onload = function() {
-  chrome.runtime.sendMessage({hello: "sup"}, function(response) {
-    console.log(response);
-  });
-  console.log('hello from alltext');
+  AllText.init(); 
 }
 
-function AllText(){
-  var textBody = ""
- 
-  function init(){
-    pTags = document.getElementsByTagName('p'); 
+class AllText {
 
-    for(p in pTags){
+  var textBody = "";
+  
+  static init(){
+    var pTags = document.getElementsByTagName('p');
+    for(var p in pTags){
       textBody = textBody + (p.innerHTML);
     }
   }
-
-  function sendTextToExtension(){
+ 
+  static sendTextToExtension(){
     
   }
-	 
-  function giveNamesSpanTags(name){
-    alltext.replace(new RegExp(name), "<span>" + name + "</span>");    
+  
+  static giveNamesSpanTag(name){
+	   
   }
-}
 
+}
