@@ -1,5 +1,5 @@
-hello();
+var port = chrome.runtime.connect();
 
-function hello() {
-  console.log('hello from the popup');
+function hello(greeting) {
+  console.log('Hello from your content script!');
 }
