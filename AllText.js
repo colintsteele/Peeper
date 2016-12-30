@@ -1,5 +1,5 @@
 $(document).ready(function(){
-   getEntitiesFromAlchemyAPI();
+  getEntitiesFromAlchemyAPI();
 });
 
 function getEntitiesFromAlchemyAPI(){
@@ -15,7 +15,7 @@ function getEntitiesFromAlchemyAPI(){
       'extract' : 'entities',
       'sentiment' : '1',
       'maxRetrieve' : '100',
-      'url' : document.URL
+      'url' : document.URL 
     },
     //cache: false,
     type: 'POST',
@@ -29,82 +29,69 @@ function getEntitiesFromAlchemyAPI(){
 }
 
 function getNames(response){
-    var names = []
+  var names = []
 
-    response.entities.forEach(function(entity){
-        if (entity.type == 'Person'){
-            names.push(entity.text)
-        }
-    });
+  response.entities.forEach(function(entity){
+    if (entity.type == 'Person'){
+        names.push(entity.text)
+    }
+  });
 
-    tagNames(names);
+  tagNames(names);
 }
 
 function tagNames(names){
-    var allText = document.body.innerHTML;
-    var people = [];
+  var allText = document.body.innerHTML;
+  var people = [];
 
-    names.forEach(function(name){
-      people.push(new Person(name));
-    });
+  names.forEach(function(name){
+    person = new Person(name);
+    allText = person.tagName(allText);     
+  });
 
-    people.forEach(function(person){
-      console.dir(person);
-      allText = person.tagName(allText);
-    });
-
-    document.body.innerHTML = allText;
+  document.body.innerHTML = allText; 
 }
 
 function Person(name){
-  this.name = name;
-  this.nameOccuranceCount = 0;
+  this.name = name;  
+  this.nameOccuranceCount = 0; 
 
   this.tagName = function(textBody){
-    taggedName = "<span id="+this.name+this.nameOccuranceCount+" class='"+this.name+"' style='color: DeepPink'>"+this.name+"</span>"
+    taggedName = "<span id='"+this.name+this.nameOccuranceCount+"' class='"+this.name+"' style='color: DeepPink'>"+this.name+"</span>"
     textBody = textBody.replace(new RegExp(this.name, 'g'), taggedName);
     this.nameOccuranceCount++;
     return textBody;
   }
 
-  function getPortrait(){
+  this.getPortrait = function(){
+    googleApiKey = 'AIzaSyBh1mbRlS0Mutavt8PuoIytqpn0Bsn_JIM' + '&'
+    googleCustomSearchId = 'cx='+ '013039004155227536814:lobto-0zlua'+'&'
+    googleUrl = 'https://www.googleapis.com/customsearch/v1?key='
+    namesUrls = []; 
+  
+    $.ajax({ 
+      url: (googleUrl + googleApiKey + googleCustomeSearchId),
+      data: {
+       'q' : this.name,
+       'num' : '1',
+       'imgSize' : 'medium', 
+       'searchType' : 'image',
+       'imgType':'face',
+      }, 
+      type: 'GET',
+      success: function(response){
+        response.items.forEach(function(item){ 
+          namesUrls.push(item); 
+        }
+
+      } 
+    });  
 
   }
 }
 
-var namesUrls = []
-
-function picsNames(names){
-
-googleApiKey = 'AIzaSyBh1mbRlS0Mutavt8PuoIytqpn0Bsn_JIM' + '&'
-googleCustomSearchId = 'cx='+ '013039004155227536814:lobto-0zlua'+'&'
-googleUrl = 'https://www.googleapis.com/customsearch/v1?key='
-
-$.ajax({
-//API key and search engine id are embedded in url
-//Process returns URL of first image result equal to face
- url: (gUrl + gApiKey + gCustomSearchId),
-   data: {
-       'q' : names ,
-       'num' : '1',
-       'imgSize' : 'medium', //not needed if renderer can scale image
-       'searchType' : 'image',
-       'imgType':'face',
-   },
-   type: "GET",
- success: function(response){
- //  console.dir(response)
-
- //  response.items[0].link.forEach(function(link){
-    namesUrls.push(response.items[0].link)
-   }
- //}
-//}
-});
-
-//Sends name to PicsNames which then adds a link to the picture to namesUrls. Should match on index.
-function tagPics(names){
- for (var i = 0; i <= names.length; i++) {
-    picsNames(names[i])
- }
-};
+function tagPics(names){ 
+  for(var i = 0; i <= names.length; i++) {
+    picsNames(names[i]);
+  }
+}
