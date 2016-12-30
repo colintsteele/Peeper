@@ -1,30 +1,11 @@
-function getNames(response){
-    var names = []
-
-    response.entities.forEach(function(entity){
-        if (entity.type == 'Person'){
-            names.push(entity.text)
-        }
-    });
-    return names;
-}
-
-function tagNames(names){
-    allText = document.body.innerHTML;
-
-    names.forEach(function(name){
-       console.log("doing a thing with "+name);
-       allText = allText.replace(name, "<span style='color: DeepPink' class='test'>"+name+"</span>"); 
-    });
-    document.body.innerHTML = allText; 
-}
-
 $(document).ready(function(){
-  allText = document.body.innerHTML  
-  pageUrl = document.URL
+   getEntitiesFromAlchemyAPI();
+});
 
+function getEntitiesFromAlchemyAPI(){
   alchemyUrl = 'https://gateway-a.watsonplatform.net/calls/url/URLGetRankedNamedEntities?apikey='
   alchemyKey = '6c8944b20948847c3923961cac83b128fe1dbd03'
+  var response;
 
   $.ajax({
     url: (alchemyUrl + alchemyKey),
@@ -33,21 +14,60 @@ $(document).ready(function(){
       'outputMode' : 'json',
       'extract' : 'entities',
       'sentiment' : '1',
-      'maxRetrieve' : '24',
-      'url' : pageUrl
+      'maxRetrieve' : '100',
+      'url' : document.URL 
     },
-    cache: false,
+    //cache: false,
     type: 'POST',
     success: function(response){
-        var names = getNames(response);
-        console.dir(names);
-        tagNames(names);
+      getNames(response);
     },
     error: function(xhr){
-      console.dir(xhr)
+      response = xhr;
     }
   });
+}
 
+function getNames(response){
+    var names = []
 
-});
+    response.entities.forEach(function(entity){
+        if (entity.type == 'Person'){
+            names.push(entity.text)
+        }
+    });
 
+    tagNames(names);
+}
+
+function tagNames(names){
+    var allText = document.body.innerHTML;
+    var people = [];
+
+    names.forEach(function(name){
+      people.push(new Person(name));
+    });
+    
+    people.forEach(function(person){
+      console.dir(person);
+      allText = person.tagName(allText);     
+    }); 
+
+    document.body.innerHTML = allText; 
+}
+
+function Person(name){
+  this.name = name;  
+  this.nameOccuranceCount = 0; 
+
+  this.tagName = function(textBody){
+    taggedName = "<span id="+this.name+this.nameOccuranceCount+" class='"+this.name+"' style='color: DeepPink'>"+this.name+"</span>"
+    textBody = textBody.replace(new RegExp(this.name, 'g'), taggedName);
+    this.nameOccuranceCount++;
+    return textBody;
+  }
+
+  function getPortrait(){
+
+  }
+}
