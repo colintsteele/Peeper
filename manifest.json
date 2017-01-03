@@ -12,6 +12,6 @@
   "content_scripts" : [{
       "run_at" : "document_end",
       "matches" : ["*://*/*"],
-      "js" : ["jquery-3.1.1.js", "AllText.js"]
+      "js" : ["jquery-3.1.1.js", "Person.js", "contentScript.js"]
   }]
 }
