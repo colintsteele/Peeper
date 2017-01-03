@@ -2,6 +2,9 @@ $(document).ready(function(){
     var entities = getEntitiesFromAlchemyAPI();
     var people = extractPeopleFromEntities(entities);
     tagOccurancesOnPage(people);
+    people.forEach(function(person){
+
+    });
 });
 
 function tagOccurancesOnPage(entities){
