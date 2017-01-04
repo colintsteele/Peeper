@@ -20,14 +20,22 @@ function Person(name){
         document.body.innerHTML = textBody; 
     }
   
-    this.givePortrats = function(){
+    this.givePortraits = function(){
         var frame = document.createElement('div');
         frame.style.width = '200px';
         frame.style.height = '200px';
-        frame.style.background = 'white';
-        frame.className = this.name; 
+        frame.style.position = 'absolute';
+        frame.style.top = '0px';
+        frame.style.left = '0px';
+        frame.style.background = 'red';
+        frame.className =  this.name + '_portrait';  
+        document.body.appendChild(frame);
         //add positioning, color, rounded edges, mmaybe even a little pointer to the mouse
         //also figure out where to appendChild
+        $(document).on('mousemove', function(e){
+            frame.style.left = e.pageX + 'px';
+            frame.style.top = e.pageY + 'px';
+        });
     }
 
     this.getPortrait = function(){

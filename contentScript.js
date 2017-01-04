@@ -2,20 +2,12 @@ $(document).ready(function(){
     var entities = getEntitiesFromAlchemyAPI();
     var people = extractPeopleFromEntities(entities);
     tagOccurancesOnPage(people);
-    people.forEach(function(person){
-
-    });
 });
 
 function tagOccurancesOnPage(entities){
-    console.dir(entities);
-    var textBody = document.body.innerHTML;
-
     entities.forEach(function(entity){
-        textBody = entity.tagOccurances(textBody);
+        entity.tagOccurances();
     }); 
-    
-    document.body.innerHTML = textBody;
 }
 
 function extractPeopleFromEntities(entities){
