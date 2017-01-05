@@ -1,28 +1,29 @@
 function Person(name){
-    this.name = name;  
-    this.nameOccurances = [];
-  
+    this.name = name;
+    this.$nameOccurances = [];
+
     this.tagOccurances = function(){
         this.giveSpans();
-        this.givePortraits(); 
+        this.givePortraits();
     }
-    
+
     this.giveSpans = function(){
         var textBody = document.body.innerHTML;
-        taggedName = 
-            "<span id='" + this.name + (this.nameOccurances.size) +
-            "' class='" + this.name +
-            "' style='color: DeepPink'>" +
-            this.name +
-            "</span>"
-        textBody = textBody.replace(new RegExp(this.name, 'g'), taggedName);
-        if $("#"this.name, (this.nameOccurances.size))&& this.nameOccurances.push($("#"this.name, (this.nameOccurances.size)))
-        document.body.innerHTML = textBody; 
+        var nameTag =
+        nameTag = $('<span />', {
+            'class' : this.name + this.nameOccurances.size,
+            css : {
+                'color' : 'DeepPink'
+            }
+        });
+        this.$nameOccurances.push(nameTag)
+        textBody = textBody.replace(new RegExp(this.name, 'g'), nameTag.outterHTML);
+        document.body.innerHTML = textBody;
     }
-  
+
     this.givePortraits = function(){
         var frame = document.createElement('div');
-        frame.className =  this.name + '_portrait';  
+        frame.className =  this.name + '_portrait';
         frame.style.width = '200px';
         frame.style.height = '200px';
         frame.style.top = '0px';
@@ -33,13 +34,13 @@ function Person(name){
         document.body.appendChild(frame);
         //consider the following instead
         $('<div />', {
-            'class' :  
+            'class' :
             'css' : {
-                'width' : 'lots'; 
-            }  
+                'width' : 'lots';
+            }
             'mouseover' : function(e){
                 console.log(e+'yeah!');
-            } 
+            }
         }).appendTo('body');
         //add positioning, color, rounded edges, mmaybe even a little pointer to the mouse
         //also figure out where to appendChild
@@ -55,7 +56,7 @@ function Person(name){
             $(this).show;
             this.putPortrait(); //if !already_put
         });
-        
+
         $(this.n).on('mouseout', function(e){
             $(this).hide
         });
@@ -67,23 +68,23 @@ function Person(name){
         googleApiKey = 'AIzaSyBh1mbRlS0Mutavt8PuoIytqpn0Bsn_JIM' + '&'
         googleCustomSearchId = 'cx='+ '013039004155227536814:lobto-0zlua'+'&'
         googleUrl = 'https://www.googleapis.com/customsearch/v1?key='
-        namesUrls = []; 
-      
-        $.ajax({ 
+        namesUrls = [];
+
+        $.ajax({
             url: (googleUrl + googleApiKey + googleCustomeSearchId),
             data: {
                'q' : this.name,
                'num' : '1',
-               'imgSize' : 'medium', 
+               'imgSize' : 'medium',
                'searchType' : 'image',
                'imgType':'face',
-            }, 
+            },
             type: 'GET',
             success: function(response){
-                response.items.forEach(function(item){ 
-                  namesUrls.push(item); 
+                response.items.forEach(function(item){
+                  namesUrls.push(item);
                 });
-            } 
-        });  
+            }
+        });
     }
 }
